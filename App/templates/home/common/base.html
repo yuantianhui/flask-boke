@@ -1,0 +1,75 @@
+{% extends 'bootstrap/base.html' %}
+{% block navbar %}
+    <nav class="navbar navbar-inverse" style="border-radius: 0;">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                        data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand">Brand</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="{{ url_for('hmain.index') }}">首页 <span class="sr-only">(current)</span></a></li>
+                    <li><a href="{{ url_for('hposts.send_posts') }}">发表博客</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <form class="navbar-form navbar-left" action="{{ url_for('hposts.search',_external=True) }}" method="post">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Search" name="con" value="{{ word }}">
+                        </div>
+                        <button type="submit" class="btn btn-default">搜索</button>
+                    </form>
+                    {% if current_user.is_authenticated %}
+                        <li><a>欢迎：{{ current_user.username }}</a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                               aria-haspopup="true"
+                               aria-expanded="false">个人中心 <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{{ url_for('owncenter.update_info') }}">修改个人资料</a></li>
+                                <li><a href="#">修改密码</a></li>
+                                <li><a href="#">修改邮箱</a></li>
+                                <li><a href="{{ url_for('owncenter.upload') }}">上传头像</a></li>
+                                <li><a href="{{ url_for('owncenter.my_favorite') }}">我的收藏</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="{{ url_for('owncenter.posts_manage') }}">博客管理</a></li>
+
+                            </ul>
+                        </li>
+                        <li><a href="{{ url_for('huser.logout') }}">退出登录</a></li>
+                    {% else %}
+                        <li><a href="{{ url_for('huser.login',_external=True) }}">登录</a></li>
+                        <li><a href="{{ url_for('huser.register',_external=True) }}">注册</a></li>
+                    {% endif %}
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
+{% endblock %}
+{% block content %}
+    <div class="container">
+        {% for info in get_flashed_messages() %}
+            <div class="alert alert-{{ var|default('success') }} alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                {{ info }}
+            </div>
+        {% endfor %}
+        {% block pagecontent %}
+        {% endblock %}
+    </div>
+{% endblock %}
+{% block scripts %}
+    {{ super() }}
+    {{ moment.include_moment() }}
+    {{ moment.locale('zh-CN') }}
+{% endblock %}
+

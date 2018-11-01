@@ -1,0 +1,9 @@
+{% extends 'home/common/base.html' %}
+{% block title %}
+    修改博客
+{% endblock %}
+{% from 'bootstrap/wtf.html' import quick_form %}
+{% block pagecontent %}
+    <div class="page-header"><h2>更新博客</h2></div>
+    {{ quick_form(form) }}
+{% endblock %}

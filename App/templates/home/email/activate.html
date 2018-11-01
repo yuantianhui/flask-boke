@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h2>你好：{{ username }}</h2>
+<h4>请点击右侧的激活链接 进行注册的做后一步操作 <a href="{{ url_for(endpoint,token=token,_external=True) }}">激活</a></h4>
+</body>
+</html>

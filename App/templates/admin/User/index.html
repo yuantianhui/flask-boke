@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    {% include 'admin/common/link.html' %}
+    <style type="text/css">
+        body {
+            padding-bottom: 40px;
+        }
+        .sidebar-nav {
+            padding: 9px 0;
+        }
+
+        @media (max-width: 980px) {
+            /* Enable use of floated navbar text */
+            .navbar-text.pull-right {
+                float: none;
+                padding-left: 5px;
+                padding-right: 5px;
+            }
+        }
+
+
+    </style>
+</head>
+<body>
+<form class="form-inline definewidth m20" action="index.html" method="get">    
+    用户名称：
+    <input type="text" name="username" id="username"class="abc input-default" placeholder="" value="">&nbsp;&nbsp;  
+    <button type="submit" class="btn btn-primary">查询</button>&nbsp;&nbsp; <button type="button" class="btn btn-success" id="addnew">新增用户</button>
+</form>
+<table class="table table-bordered table-hover definewidth m10">
+    <thead>
+    <tr>
+        <th>用户id</th>
+        <th>用户名称</th>
+        <th>性别</th>
+        <th>角色</th>
+        <th>上次登录时间</th>
+        <th>注册时间</th>
+        <th>状态</th>
+        <th>操作</th>
+    </tr>
+    </thead>
+    {% for row in data %}
+	     <tr>
+            <td>{{ row.id }}</td>
+            <td>{{ row.username }}</td>
+            <td>
+                {% if row.sex %}
+                    男
+                {% else %}
+                女
+                {% endif %}
+            </td>
+            <td>
+                {% if row.role %}
+                    管理员
+                {% else %}
+                    普通
+                {% endif %}
+            </td>
+            <td>{{ moment(row.lastLogin).format('YYYY-MM-DD H:m:s') }}</td>
+            <td>{{ moment(row.registerTime).format('YYYY-MM-DD H:m:s') }}</td>
+            <td>
+                {% if row.confirm %}
+                    激活
+                {% else %}
+                    未激活
+                {% endif %}
+            </td>
+            <td>
+                <a href="{{ url_for('auser.edit_user',uid=row.id) }}">编辑</a>
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+</body>
+</html>
+<script>
+    $(function () {
+        
+
+		$('#addnew').click(function(){
+
+				window.location.href="{{ url_for('auser.add_user') }}";
+		 });
+
+
+    });
+
+	function del(id)
+	{
+		
+		
+		if(confirm("确定要删除吗？"))
+		{
+		
+			var url = "index.html";
+			
+			window.location.href=url;		
+		
+		}
+	
+	
+	
+	
+	}
+</script>

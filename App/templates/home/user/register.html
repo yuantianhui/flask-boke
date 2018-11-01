@@ -1,0 +1,14 @@
+{% extends 'home/common/base.html' %}
+{% block title %}
+    注册
+{% endblock %}
+{% from 'bootstrap/wtf.html' import quick_form %}
+{% block pagecontent %}
+    <h2>注册</h2>
+    <div class="row">
+        <div class="col-md-8">.col-md-8</div>
+        <div class="col-md-4">{{ quick_form(form) }}
+            <span> <a href="{{ url_for('huser.again_activate',_external=True) }}">已有账户 未激活？</a></span>
+        </div>
+    </div>
+{% endblock %}

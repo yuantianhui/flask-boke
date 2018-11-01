@@ -1,0 +1,27 @@
+{% extends 'home/common/base.html' %}
+{% block title %}
+    发表博客
+{% endblock %}
+{% block scripts %}
+    {{ super() }}
+    <script src="//cdn.ckeditor.com/4.4.6/standard/ckeditor.js"></script>
+{% endblock %}
+{% from 'bootstrap/wtf.html' import quick_form %}
+{% block pagecontent %}
+    <div class="page-header"><h2>发表博客</h2></div>
+    <form action="" method="post">
+        {{ form.csrf_token }}
+        {{ form.title.label() }}
+        {{ form.title(class='form-control') }}
+        {%  for errors in form.title.errors  %}
+            <div class="alert alert-danger" role="alert">{{ errors }}</div>
+        {% endfor %}
+        <br>
+        {{ form.article.label }}
+        {{ form.article(class="ckeditor") }}
+        {%  for errors in form.article.errors  %}
+                <div class="alert alert-danger" role="alert">{{ errors }}</div>
+        {% endfor %}
+        <button type="submit" class="btn btn-success">发表</button>
+    </form>
+{% endblock %}

@@ -1,0 +1,11 @@
+<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='admin/css/bootstrap.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='admin/css/bootstrap-responsive.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='admin/css/style.css') }}" />
+    <script type="text/javascript" src="{{ url_for('static',filename='admin/js/jquery.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static',filename='admin/js/jquery.sorted.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static',filename='admin/js/bootstrap.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static',filename='admin/js/ckform.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static',filename='admin/js/common.js') }}"></script>
+{{ moment.include_jquery() }}
+{{ moment.include_moment() }}
+{{ moment.locale('zh-CN') }}

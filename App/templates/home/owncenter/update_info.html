@@ -1,0 +1,14 @@
+{% extends 'home/common/base.html' %}
+{% block title %}
+    修改个人信息
+{% endblock %}
+{% from 'bootstrap/wtf.html' import quick_form %}
+{% block pagecontent %}
+    <div class="page-header"><h2>修改个人信息</h2></div>
+    <div class="row">
+        <div class="col-md-8">    {{ quick_form(form) }}
+        </div>
+        <div class="col-md-4">
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,111 @@
+{% extends 'home/common/base.html' %}
+{% block title %}
+    博客详情
+{% endblock %}
+{% block pagecontent %}
+    <h2>{{ posts.title }}</h2>
+    <hr style="border:3px double #987cb9;" width="100%" color=#987cb9 size=3>
+    {{ posts.article|safe }}
+    <br>
+    <span style="float: right">
+    <p onclick="dofavorite({{ posts.id }})" style="cursor: pointer;">{% if current_user.is_authenticated %}
+        {% if current_user.is_favorite(posts.id) %}取消收藏{% else %}收藏{% endif %}{% else %}收藏{% endif %}</p>
+    <p>作者：<span style="font-size: 20px;font-weight: bold">{{ posts.user.username }}</span></p>
+    <p>发表于：{{ moment(posts.timestamp).format('YYYY-MM-DD H:m:s') }}</p>
+</span>
+
+    <div class="page-header" style="clear: both;"><h3>评论内容</h3></div>
+    {#  显示评论的代码  #}
+    {% for message in comment %}
+        <ul class="media-list">
+            <li class="media">
+                <div class="media-left">
+                    <a href="#">
+                        <img class="media-object" src="{{ url_for('static',filename='upload/s_'+message.user.icon) }}"
+                             alt="..." width="70" height="70">
+                    </a>
+                </div>
+                <div class="media-body">
+                    <h4 class="media-heading">
+                        {% if message.pid==pid %}
+                            {{ message.user.username }}
+                        {% else %}
+                            {{ message.user.username }} 回复了 {{ message.pid|replayName }}
+                        {% endif %}
+                        <span
+                            style="float:right;font-size: 14px;">{{ moment(message.timestamp).format('YYYY-MM-DD H:m:s') }} <button
+                            class="btn btn-danger btn-xs" onclick="replay({{ message.id }})">回复</button></span></h4>
+                    <p>{{ message.article }}</p>
+{#                    <ul class="media-list">#}
+{#                        <li class="media">#}
+{#                            <div class="media-left">#}
+{#                                <a href="#">#}
+{#                                    <img class="media-object"#}
+{#                                         src="{{ url_for('static',filename='upload/s_'+message.user.icon) }}" alt="..."#}
+{#                                         width="70" height="70">#}
+{#                                </a>#}
+{#                            </div>#}
+{#                            <div class="media-body">#}
+{#                                <h4 class="media-heading">{{ message.user.username }} <span#}
+{#                                        style="float:right;font-size: 14px;">{{ moment(message.timestamp).format('YYYY-MM-DD H:m:s') }} <button#}
+{#                                        class="btn btn-danger btn-xs"#}
+{#                                        onclick="replay({{ message.id }})">回复</button></span></h4>#}
+{#                                <p>{{ message.article }} {{ message.path|countd }}</p>#}
+{##}
+{#                            </div>#}
+{#                        </li>#}
+{#                </div>#}
+            </li>
+
+        </ul>
+        <form action="{{ url_for('hposts.comment') }}" method="post" class='replay' id='replay{{ message.id|string }}'>
+            {{ form.csrf_token }}
+            <input type="hidden" name="rid" value="{{ message.id }}">
+            <input type="hidden" name="pid" value="{{ pid }}">
+            {{ form.article(class='form-control',style='height:200px;resize:none;',placeholder='请输入评论内容5~40字之间',required="true",minlength=5,maxlength=40) }}
+            <br>
+            <button type="submit" class="btn btn-success">发表回复</button>
+        </form>
+        <br>
+    {% endfor %}
+
+    <br>
+    <div class="page-header"><h3>发表评论</h3></div>
+    <form action="{{ url_for('hposts.comment') }}" method="post">
+        {{ form.csrf_token }}
+        <input type="hidden" name="pid" value="{{ pid }}">
+        {{ form.article(class='form-control',style='height:200px;resize:none;',placeholder='请输入评论内容5~40字之间',required="true",minlength=5,maxlength=40) }}
+        <br>
+        <button type="submit" class="btn btn-success">发表评论</button>
+    </form>
+{% endblock %}
+{% block scripts %}
+    {{ super() }}
+    <script>
+        $(function () {
+            $('.replay').hide();
+        });
+
+        function replay(rid) {
+            $('.replay').hide();
+            $('#replay' + rid).show()
+        }
+
+
+        function dofavorite(pid) {
+            node = $('p:first-child');
+            html = node.html();
+            $.get({{ url_for('hposts.do_favorite') }}, {'pid': pid}, function (data, status) {
+                if (data.res == 200)
+                    if (html == '收藏') {
+                        node.html('取消收藏');
+                    } else {
+                        node.html('收藏');
+                    }
+                else if (window.confirm("还没有登录？是否前去登录")) {
+                    window.location.href = '{{ url_for('huser.login',_external=True) }}'
+                }
+            });
+        }
+    </script>
+{% endblock %}

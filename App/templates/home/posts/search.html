@@ -1,0 +1,28 @@
+{% extends 'home/common/base.html' %}
+{% block title %}
+    搜索页
+{% endblock %}
+{% block pagecontent %}
+    <div class="page-header"><h2>搜索结果为...</h2></div>
+    {% for posts in data %}
+        <div class="media">
+            <a href="{{ url_for('hposts.posts_detail',pid=posts.id) }}" style="color: black;text-decoration: none;">
+                <div class="media-left media-middle">
+                    <img class="media-object" src="{{ url_for('static',filename='upload/'+posts.user.icon) }}" alt="..."
+                         width="100">
+                </div>
+                <div class="media-body">
+                    <h4 class="media-heading">{{ posts.title }} <span
+                            style="float: right;color: #ccc;font-size:14px;">{{ moment(posts.timestamp).fromNow() }}</span>
+                    </h4>
+                    {{ posts.article }}
+                </div>
+            </a>
+        </div>
+    {% endfor %}
+        {% if data|length == 0 %}
+            <h3>您搜索的内容<span style="font-size: 22px;font-weight:bold; ">{{ word }}</span>不存在 请换一个内容在次搜索</h3>
+        {% endif %}
+    {% from 'common/page.html' import page %}
+    {{ page(pagination,'hposts.search',con=word) }}
+{% endblock %}

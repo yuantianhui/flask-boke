@@ -1,0 +1,11 @@
+{% extends 'home/common/base.html' %}
+{% block title %}
+    登录
+{% endblock %}
+{% from 'bootstrap/wtf.html' import quick_form %}
+{% block pagecontent %}
+    <div class="page-hraders"><h2>头像处理</h2></div>
+        <img src="{{ img_url }}" alt="">
+        <p></p>
+        {{ quick_form(form) }}
+{% endblock %}
